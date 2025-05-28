@@ -116,7 +116,8 @@ export default function PricingPage() {
                         Simple, Transparent Pricing
                     </h1>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Choose the plan that's right for your financial journey. Cancel anytime.
+                        Choose the plan that's right for your financial journey.
+                        Cancel anytime.
                     </p>
                 </motion.Div>
 
@@ -233,7 +234,9 @@ export default function PricingPage() {
                             Need something different?
                         </h3>
                         <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                            We also offer custom enterprise plans for businesses and financial institutions. Contact our sales team for more information.
+                            We also offer custom enterprise plans for businesses
+                            and financial institutions. Contact our sales team
+                            for more information.
                         </p>
                         <Link href="/contact">
                             <Button variant="outline" size="lg">

@@ -13,7 +13,7 @@ const stripePromise = loadStripe(
 );
 
 interface CheckoutButtonProps {
-    plan: "pro" | "premium";
+    plan: "pro" | "premium" | "enterprise";
     className?: string;
     children: React.ReactNode;
 }

@@ -1,153 +1,89 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
     LayoutDashboard,
-    FileText,
-    User,
+    Wallet,
+    BarChart3,
     Settings,
-    HelpCircle,
-    CreditCard,
-    FileSpreadsheet,
-    History,
+    LogOut,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 
-const navItems = [
+const routes = [
     {
-        title: "Dashboard",
-        href: "/dashboard",
+        label: "Dashboard",
         icon: LayoutDashboard,
+        href: "/dashboard",
+        color: "text-sky-500",
     },
     {
-        title: "Cover Letters",
-        href: "/cover-letters",
-        icon: FileText,
+        label: "Budgets",
+        icon: Wallet,
+        href: "/budgets",
+        color: "text-violet-500",
     },
     {
-        title: "Templates",
-        href: "/templates",
-        icon: FileSpreadsheet,
+        label: "Analytics",
+        icon: BarChart3,
+        href: "/analytics",
+        color: "text-pink-700",
     },
     {
-        title: "History",
-        href: "/history",
-        icon: History,
-    },
-    {
-        title: "Profile",
-        href: "/profile",
-        icon: User,
-    },
-    {
-        title: "Billing",
-        href: "/billing",
-        icon: CreditCard,
-    },
-    {
-        title: "Settings",
-        href: "/settings",
+        label: "Settings",
         icon: Settings,
-    },
-    {
-        title: "Help & Support",
-        href: "/help",
-        icon: HelpCircle,
+        href: "/settings",
+        color: "text-orange-700",
     },
 ];
 
-const DashboardSidebar = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+export default function DashboardSidebar() {
     const pathname = usePathname();
 
     return (
-        <aside
-            className={cn(
-                "fixed left-0 top-0 z-30 h-screen bg-card/80 backdrop-blur-sm border-r transition-all duration-300 md:relative lg:block",
-                isCollapsed ? "w-[70px]" : "w-[250px]",
-            )}
-        >
-            <div className="flex h-full flex-col">
-                <div
-                    className={cn(
-                        "flex h-16 items-center border-b px-4",
-                        isCollapsed ? "justify-center" : "justify-between",
-                    )}
+        <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
+            <div className="px-3 py-2 flex-1">
+                <Link
+                    href="/dashboard"
+                    className="flex items-center pl-3 mb-14"
                 >
-                    {!isCollapsed && (
-                        <Link href="/" className="flex items-center gap-2">
-                            <FileText className="h-6 w-6 text-primary" />
-                            <span className="font-bold text-lg">
-                                Budgetly
-                            </span>
-                        </Link>
-                    )}
-
-                    {isCollapsed && (
+                    <h1 className="text-2xl font-bold">Budgetly</h1>
+                </Link>
+                <div className="space-y-1">
+                    {routes.map((route) => (
                         <Link
-                            href="/"
-                            className="flex items-center justify-center"
+                            key={route.href}
+                            href={route.href}
+                            className={cn(
+                                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
+                                pathname === route.href
+                                    ? "text-white bg-white/10"
+                                    : "text-zinc-400",
+                            )}
                         >
-                            <FileText className="h-6 w-6 text-primary" />
-                        </Link>
-                    )}
-
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className={cn(
-                            "h-8 w-8",
-                            isCollapsed ? "rotate-180" : "",
-                        )}
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4"
-                        >
-                            <path d="m15 18-6-6 6-6" />
-                        </svg>
-                        <span className="sr-only">Toggle Sidebar</span>
-                    </Button>
-                </div>
-
-                <div className="flex-1 overflow-auto py-6">
-                    <nav className="grid gap-1 px-2">
-                        {navItems.map((item, index) => (
-                            <Link
-                                key={index}
-                                href={item.href}
-                                className={cn(
-                                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent",
-                                    pathname === item.href
-                                        ? "bg-accent text-accent-foreground"
-                                        : "text-muted-foreground",
-                                    isCollapsed ? "justify-center" : "",
-                                )}
-                            >
-                                <item.icon
-                                    className={cn(
-                                        "h-5 w-5",
-                                        isCollapsed ? "mr-0" : "mr-2",
-                                    )}
+                            <div className="flex items-center flex-1">
+                                <route.icon
+                                    className={cn("h-5 w-5 mr-3", route.color)}
                                 />
-                                {!isCollapsed && <span>{item.title}</span>}
-                            </Link>
-                        ))}
-                    </nav>
+                                {route.label}
+                            </div>
+                        </Link>
+                    ))}
                 </div>
             </div>
-        </aside>
+            <div className="px-3 py-2">
+                <Button
+                    onClick={() => signOut()}
+                    variant="ghost"
+                    className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10"
+                >
+                    <LogOut className="h-5 w-5 mr-3" />
+                    Logout
+                </Button>
+            </div>
+        </div>
     );
-};
-
-export default DashboardSidebar;
+}
