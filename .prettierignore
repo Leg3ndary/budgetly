@@ -1,0 +1,10 @@
+# Ignore artifacts:
+build
+coverage
+.next
+
+*.mdx
+package.json
+package-lock.json
+
+components.json
